@@ -1,5 +1,6 @@
 import "./App.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { v4 as uuidv4} from "uuid";
 
 function App() {
   const [statements, setStatements] = useState([]);
@@ -12,6 +13,27 @@ function App() {
     statement: false,
     amount: false,
   });
+
+  const [total, setTotal] = useState(0)
+
+  useEffect(() => {
+    const newTotal = statements.reduce((sum, {type, amount}) => {
+      if(type === "expense") {
+        return sum - parseFloat(amount);
+      } else return sum + parseFloat(amount);
+    }, 0);
+    setTotal(newTotal);
+  }, [statements]);
+
+  const renderTotal = () => {
+    if(total > 0){
+      return<h1 className="total-text success">+{Math.abs(total)}</h1>;
+    } else if (total < 0 ) {
+       return<h1 className="total-text danger">-{Math.abs(total)}</h1>;
+    } else {
+      return<h1 className="total-text">{Math.abs(total)}hey bob</h1>;
+    }
+  };
 
   const handleUpdateInput = (e) => {
     setInput({
@@ -42,6 +64,7 @@ function App() {
       setStatements([
         ...statements,
         {
+          id : uuidv4(),
           name: statement,
           amount: parseFloat(amount).toFixed(2),
           type: statementType,
@@ -59,7 +82,7 @@ function App() {
   return (
     <main>
       <div>
-        <h1 className="total-text">0</h1>
+      {renderTotal()}
         <div className="input-container">
           <input
             type="text"
@@ -92,8 +115,8 @@ function App() {
           <button onClick={handleAddNewStatement}>+</button>
         </div>
         <div>
-          {statements.map(({ name, type, amount, date }) => (
-            <div className="card">
+          {statements.map(({ name, type, amount, date, id }) => (
+            <div className="card" key={id}>
               <div className="card-info">
                 <h4>{name}</h4>
                 <p>{date}</p>
