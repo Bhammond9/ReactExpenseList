@@ -2,7 +2,9 @@ import "./App.css";
 import { useState } from "react";
 
 function App() {
-
+  const [taste, setTast] = useState({
+    thatMuffinIsBad: true
+  })
   const [input, setInput] = useState({
     statement: "",
     amount: "",
@@ -14,17 +16,39 @@ function App() {
       [e.target.name]: e.target.value,
     });
   };
+    const handleAddNewStatement = () => {
+    const { statement, amount } = input;
+
+    if (!statement) {
+      return setShowError({
+        statement: true,
+        amount: false,
+      });
+    } else if (!amount) {
+      return setShowError({
+        statement: false,
+        amount: true,
+      });
+    } else {
+      setShowError({
+        statement: false,
+        amount: false,
+      });
+      // ADD LOGIC TO ADD STATMENT
+    }
+  };
 
   return (
     <main>
       <div>
         <h1 className="total-text">0</h1>
         <div className="input-container">
-          <input type="text" 
+          <input 
+          type="text" 
           placeholder="Income or expense" 
           onChange={handleUpdateInput}
           value = {input.statement}
-          name= "amount"
+          name= "statement"
           />
           <input type="number" 
           placeholder="$5000"
@@ -40,7 +64,7 @@ function App() {
             <option value="income">Income</option>
             <option value="expense">Expense</option>
           </select>
-          <button>+</button>
+          <button onClick={handleAddNewStatement}>+</button>
         </div>
         <div>
           <div className="card">
