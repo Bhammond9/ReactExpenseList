@@ -1,4 +1,9 @@
 import "./App.css";
+import { useState } from "react";
+
+const [statement, setStatemnt] = useState("")
+const [amount, setAmount] = useState("")
+const [statmentType, setStatementType] = useState("income")
 
 function App() {
   return (
@@ -6,7 +11,10 @@ function App() {
       <div>
         <h1 className="total-text">0</h1>
         <div className="input-container">
-          <input type="text" placeholder="Income or expense" />
+          <input type="text" placeholder="Income or expense" 
+          onChange={(e) => {setStatemnt(e.target.value);
+          }}/>
+          
           <input type="number" />
           <select>
             <option value="income">Income</option>
